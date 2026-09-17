@@ -351,7 +351,7 @@
     <div class="wrap">
       <div class="section-head">
         <h2>Pour qui ?</h2>
-        <p class="lede">Footballeurs de 14 à 25 ans — Espagne, France et Italie pour commencer.</p>
+        <p class="lede">Footballeurs de 16 à 25 ans — Espagne, France et Italie pour commencer.</p>
       </div>
       <div class="segments">
         <div class="segment"><span class="tag">A</span>Haut potentiel, invisible</div>
@@ -416,7 +416,8 @@
               </div>
               <div class="field">
                 <label for="p-age">Âge</label>
-                <input id="p-age" name="age" type="text" placeholder="19" oninput="updateLiveCard()">
+                <input id="p-age" name="age" type="number" min="16" max="99" required="" placeholder="19" oninput="updateLiveCard(); checkMinor();">
+                <span style="display:block;font-size:11px;color:rgba(255,255,255,.45);margin-top:4px;">16 ans minimum. Pour les moins de 18 ans, un parent ou tuteur légal doit compléter les informations ci-dessous.</span>
               </div>
               <div class="field">
                 <label for="p-pie">Pied</label>
@@ -429,6 +430,13 @@
               <div class="field">
                 <label for="p-instagram">Instagram</label>
                 <input id="p-instagram" name="instagram" type="text" required="" placeholder="@tonpseudo">
+              </div>
+              <div class="field" id="parent-block" style="display:none;border-top:1px solid rgba(255,255,255,.1);padding-top:14px;margin-top:4px;">
+                <span style="display:block;font-size:12px;color:rgba(255,255,255,.7);margin-bottom:10px;">👨‍👩‍👧 Joueur mineur (16-17 ans) — coordonnées d'un parent ou tuteur légal, requises pour valider l'inscription et toute souscription payante.</span>
+                <label for="p-parent-name">Nom du parent / tuteur légal</label>
+                <input id="p-parent-name" name="parent_nom" type="text" placeholder="Ex. Marie Talbot">
+                <label for="p-parent-contact" style="margin-top:10px;display:block;">Email ou téléphone du parent / tuteur légal</label>
+                <input id="p-parent-contact" name="parent_contact" type="text" placeholder="email@exemple.com ou 06 12 34 56 78">
               </div>
 
               <div class="mini-sliders">
@@ -648,6 +656,22 @@
     if(age) metaParts.push(age + ' ans');
     metaParts.push(foot);
     document.getElementById('lc-meta').textContent = metaParts.join(' · ');
+  }
+
+  function checkMinor(){
+    const ageVal = parseInt(document.getElementById('p-age').value, 10);
+    const block = document.getElementById('parent-block');
+    const parentName = document.getElementById('p-parent-name');
+    const parentContact = document.getElementById('p-parent-contact');
+    if(ageVal && ageVal < 18){
+      block.style.display = 'block';
+      parentName.setAttribute('required','');
+      parentContact.setAttribute('required','');
+    } else {
+      block.style.display = 'none';
+      parentName.removeAttribute('required');
+      parentContact.removeAttribute('required');
+    }
   }
   function updateStat(key, val){
     document.getElementById('val-'+key).textContent = val;
